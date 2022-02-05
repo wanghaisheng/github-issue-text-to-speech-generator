@@ -5,19 +5,20 @@ password = "d3f0cb84e9"
 
 from dataclasses import dataclass
 
+
 @dataclass
 class RedditPost:
     id: str
     title: str
 
+
 @dataclass
-class RedditPostToptic:
+class RedditPostTopic:
     id: str
     url: str
     subredditName: str
     author: str
     title: str
-    content: str
     upvotes: int
     commentsCount: int
     posts: list[RedditPost]
