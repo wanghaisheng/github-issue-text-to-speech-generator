@@ -1,6 +1,4 @@
 from . import RedditUtils as utils
-import requests
-import json
 import praw
 
 reddit = ""
