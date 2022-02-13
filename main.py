@@ -19,6 +19,7 @@ def makeVideoFrom(submission):
     mkdirIfExists(folderPath)
     makePostVideoAt(folderPath + "/post", submission)
     makeCommentsVideosAt(folderPath + "/comments", submission)
+    clipTogether(folderPath)
 
 
 def makePostVideoAt(path, submission):
@@ -26,7 +27,6 @@ def makePostVideoAt(path, submission):
 
     screenshotService.screenshotPostAt(path+"/screenshot", submission)
     speechToVoiceService.makeVoiceAt(path+"/speech", submission.title)
-    clipTogether(path)
 
 
 def makeCommentsVideosAt(path, submission):
@@ -37,14 +37,14 @@ def makeCommentsVideosAt(path, submission):
     print(len(comments))
     comments = submission.comments.list()
     for comment in comments:
-        if commentPerPostCount >= 10:
+        if commentPerPostCount >= 20:
             break
 
         if comment.score > 500:
             print("count is {}".format(commentPerPostCount))
             commentPerPostCount += 1
             screenshotService.screenshotCommentAt(path+"/screenshot{}".format(commentPerPostCount), comment)
-            # speechToVoiceService.makeVoiceAt(path+"/speech{}".format(commentPerPostCount), comment)
+            speechToVoiceService.makeVoiceAt(path+"/speech{}".format(commentPerPostCount), str(comment.body))
 
 
 def clipTogether(path):
@@ -58,7 +58,4 @@ if __name__ == '__main__':
 
     for submission in submissions:
         if submission.num_comments > 2000 and submission.score > 5000:
-            print("saving submisiion")
             makeVideoFrom(submission)
-    # speechToVoiceService.makeVoiceAt("./videos/new/askReddit_{}".format("skzwrs"), "What is a socially unacceptable thing that you dont like or hate")
-    # screenshotService.screenshotPostAt("./videos/new/askReddit_{}".format("skzwrs"), "asd")
