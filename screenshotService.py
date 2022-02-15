@@ -29,9 +29,6 @@ class ScreenshotService:
         upwoteDiv = postElement.find_element(By.CLASS_NAME, "_1rZYMD_4xY3gRcSS3p8ODO")
         authorElement = postElement.find_element(By.CLASS_NAME, "_2tbHP6ZydRpjI44J3syuqC")
 
-        print(submission.author)
-        print(submission.score)
-        print(submission.title)
         self.driver.execute_script('arguments[0].innerText = "u/{}"'.format(str(submission.author).replace('"', "'")),
                                    authorElement)
         self.driver.execute_script('arguments[0].innerText = "{}"'.format(str(submission.score).replace('"', "'")),
@@ -39,7 +36,7 @@ class ScreenshotService:
         self.driver.execute_script('arguments[0].innerText = "{}"'.format(str(submission.title).replace('"', "'")),
                                    titleElement)
 
-        postElement.screenshot(path + ".png")
+        postElement.screenshot(path + ".jpg")
 
     def screenshotCommentAt(self, path, comment):
         self.initDriver()
@@ -47,8 +44,7 @@ class ScreenshotService:
         authorElement = commentElement.find_element(By.CLASS_NAME, "wM6scouPXXsFDSZmZPHRo")
         upwoteElement = commentElement.find_element(By.CLASS_NAME, "_1rZYMD_4xY3gRcSS3p8ODO")
         paragraphElement = commentElement.find_element(By.CLASS_NAME, "_1qeIAgB0cPwnLhDF9XSiJM")
-        print("asd")
-        print(comment.body)
+
         try:
             self.driver.execute_script(
                 'arguments[0].innerText = "u/{}"'.format(str(comment.author.name).replace('"', "'")),
@@ -58,6 +54,6 @@ class ScreenshotService:
             self.driver.execute_script('arguments[0].innerText = "{}"'.format(str(comment.body).replace('"', "'")),
                                        paragraphElement)
 
-            commentElement.screenshot(path + ".png")
+            commentElement.screenshot(path + ".jpg")
         except:
             print("couldn't save the screenshot, error at {}".format(path))
