@@ -59,7 +59,7 @@ def clipTogether(path):
     # ffmpeg command for creating post video
     os.system('ffmpeg -i {} -i {} -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -c:v libx264 -tune stillimage -b:v 1M -c:a aac -b:a '
               '192k -pix_fmt yuv420p {}'.format(path + "/post/screenshot.jpg", path + "/post/speech.mp3", path + "/videos/out.mp4"))
-    file.write("file '/videos/out.mp4'\n".format(path))
+    file.write("file 'out.mp4'\n")
 
     # ffmpeg creating comments videos
     for fileName in os.listdir(path + "/comments"):
@@ -72,10 +72,9 @@ def clipTogether(path):
                     'ffmpeg -i {} -i {} -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -c:v libx264 -tune stillimage -b:v 1M -c:a aac -b:a '
                     '192k -pix_fmt yuv420p {}'.format(path + "/comments/screenshot{}.jpg".format(count), path + "/comments/speech{}.mp3".format(count),
                                                       path + "/videos/out{}.mp4".format(count)))
-                file.write("file '/videos/out{}.mp4'\n".format(path, count) )
+                file.write("file 'out{}.mp4'\n".format(count))
     file.close()
-
-    os.system("ffmpeg -f concat -i /videos/videos.txt -vf select=concatdec_select -af aselect=concatdec_select,aresample=async=1 /videos/finalOutput.mp4")
+    os.system("ffmpeg -f concat -safe 0 -i {}/videos/videos.txt -vf select=concatdec_select -af aselect=concatdec_select,aresample=async=1 {}/videos/finalOutput.mp4".format(path, path))
 
 def main():
     global screenshotService, speechToVoiceService
