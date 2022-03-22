@@ -9,15 +9,11 @@ class ScreenshotService:
     driver = None
 
     def __init__(self):
-        options = Options()
-        options.add_argument("window-size=850,1000")
-        self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
-        url = "file:///Users/tigran/Desktop/redditPage.html"
-        self.driver.get(url)
+        self.initDriver()
 
     def initDriver(self):
         options = Options()
-        options.add_argument("window-size=850,1000")
+        options.add_argument("window-size=700,1000")
         self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
         url = "file:///Users/tigran/Desktop/redditPage.html"
         self.driver.get(url)

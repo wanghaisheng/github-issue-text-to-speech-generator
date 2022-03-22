@@ -3,6 +3,7 @@ from speechToVoiceService import SpeechToVoiceService
 from screenshotService import ScreenshotService
 from utils import mkdirIfExists
 from videoEdditingService import clipTogether
+import time
 
 screenshotService = None
 speechToVoiceService = None
