@@ -1,6 +1,6 @@
 import os
 
-def mkdirIfExists(path):
+def mkdirIfDoesntExist(path):
     if os.path.isdir(path):
         print("path {} exists".format(path))
         return

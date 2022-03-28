@@ -27,5 +27,3 @@ class DBManager():
         cursor = self.conn.cursor()
         cursor.execute("""SELECT * FROM posts WHERE id = (?)""", (post_id,))
         return cursor.fetchone()
-
-# DBManager().cleanTables()

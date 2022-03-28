@@ -2,9 +2,10 @@ from . import utils
 from moviepy.editor import *
 import random
 
-def clipTogether(path):
-    utils.mkdirIfExists(path + "/videos")
-
+def clipTogether(initialPath, submission):
+    path = initialPath + f"/askReddit_{submission.id}"
+    utils.mkdirIfDoesntExist(path + "/videos")
+    utils.mkdirIfDoesntExist(initialPath + "/finalVideos")
     # ffmpeg command for creating post video
     clips = []
     postVideoPath = path + "/videos/out.mp4"
@@ -41,7 +42,7 @@ def clipTogether(path):
 
     clips.insert(0, finalBgClip)
     final_clip = CompositeVideoClip(clips)
-    final_clip.write_videofile(path + "/videos/output_1.mp4", temp_audiofile=path + "/videos/temp-audio.m4a",
+    final_clip.write_videofile(initialPath + f"/finalVideos/{submission.id}.mp4", temp_audiofile=initialPath + "/finalVideos/temp-audio.m4a",
                                remove_temp=True, codec="libx264",
                                audio_codec="aac")
 
