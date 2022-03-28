@@ -14,10 +14,10 @@ def makeVideoFrom(submission):
 
     folderPath = "./VideoCreator/videos/new/askReddit_{}".format(submission.id)
     mkdirIfExists(folderPath)
-    db.insertPost(submission)
     makePostVideoAt(folderPath + "/post", submission)
     makeCommentsVideosAt(folderPath + "/comments", submission)
     clipTogether(folderPath)
+    db.insertPost(submission)
 
 
 def makePostVideoAt(path, submission):
@@ -31,14 +31,17 @@ def makeCommentsVideosAt(path, submission):
     global db
 
     mkdirIfExists(path)
+    maxCommentCount = 10
+    minimumCommentScore = 250
     commentPerPostCount = 0
 
+    submission.comments.replace_more(limit=0)
     for comment in submission.comments.list():
         print(f"asd submission {submission.id}  {submission.title}  {submission.name}   comment {comment.id}")
-        if commentPerPostCount >= 5:
+        if commentPerPostCount >= maxCommentCount:
             break
 
-        if comment.score > 500:
+        if comment.score > minimumCommentScore:
             print("count is {}".format(commentPerPostCount))
             commentPerPostCount += 1
             screenshotService.screenshotCommentAt(path+"/screenshot{}".format(commentPerPostCount), comment)
@@ -47,16 +50,18 @@ def makeCommentsVideosAt(path, submission):
 
 def main():
     global screenshotService, speechToVoiceService, db
+    submissionsLimit = 10
+    minumumCommentsNumber = 1000
+    minimumScore = 2000
 
     RedditService.startSession()
-    submissions = RedditService.getHotSubmissions()
+    submissions = RedditService.getHotSubmissions(limit=submissionsLimit)
     screenshotService = ScreenshotService()
     speechToVoiceService = SpeechToVoiceService()
     db = DBManager()
 
     for submission in submissions:
-        if submission.num_comments > 2000 and submission.score > 5000 and db.getPostWithId(post_id=submission.id) is None:
-            print(f"asd getPostWithId {db.getPostWithId(post_id=submission.id)}")
+        if submission.num_comments > minumumCommentsNumber and submission.score > minimumScore and db.getPostWithId(post_id=submission.id) is None:
             makeVideoFrom(submission)
 
 if __name__ == '__main__':

@@ -28,4 +28,4 @@ class DBManager():
         cursor.execute("""SELECT * FROM posts WHERE id = (?)""", (post_id,))
         return cursor.fetchone()
 
-DBManager().cleanTables()
+# DBManager().cleanTables()

@@ -1,8 +1,6 @@
-import os
 from . import utils
 from moviepy.editor import *
-from moviepy.video.fx.crop import crop
-
+import random
 
 def clipTogether(path):
     utils.mkdirIfExists(path + "/videos")
@@ -31,7 +29,7 @@ def clipTogether(path):
 
     for i in range(0, len(clips)):
         clips[i] = clips[i].set_position("center")
-        clips[i] = clips[i].resize(width=1000)
+        clips[i] = clips[i].resize(width=500)
         if i == 0:
             clips[i] = clips[i].set_start(0)
             clips[i] = clips[i].set_end(clips[i].duration)
@@ -49,20 +47,31 @@ def clipTogether(path):
 
 
 def getBgClipForClips(clips: [VideoFileClip]):
-    bgVideo = VideoFileClip("./VideoCreator/videos/bgVideos/video1.mp4")
-    (w, h) = bgVideo.size
-    croppedBgClip = crop(bgVideo, width=1080, height=1920, x_center=w / 2, y_center=h / 2)
+    path = "./VideoCreator/videos/bgVideos/"
+    videoName = random.choice(os.listdir(path))
+
+    bgVideo = VideoFileClip(f"{path}{videoName}")
 
     overallDuration = 0
 
     for clip in clips:
         overallDuration += clip.duration
 
-    intDevision = overallDuration // croppedBgClip.duration
-    remnant = overallDuration / croppedBgClip.duration - intDevision
+    intDevision = overallDuration // bgVideo.duration
+    remnant = abs(overallDuration / bgVideo.duration - intDevision)
 
-    remnantSubclip = croppedBgClip.subclip(0, croppedBgClip.duration * remnant)
-    croppedClips = [croppedBgClip] * int(intDevision)
+    remnantSubclip = bgVideo.subclip(0, bgVideo.duration * remnant)
+    croppedClips = [bgVideo] * int(intDevision)
     croppedClips.insert(0, remnantSubclip)
 
     return concatenate_videoclips(croppedClips)
+
+def createBgVideos():
+    subclipLenght = 70
+    fullVideoPath = "./VideoCreator/videos/bgVideos/download.mp4"
+    fullVideo = VideoFileClip(fullVideoPath)
+    subclipsCount = int(fullVideo.duration / subclipLenght)
+    (w, h) = fullVideo.size
+
+    for i in range(0, subclipsCount):
+        os.system(f'ffmpeg -ss {i * subclipLenght} -i {fullVideoPath} -filter:v "crop=608:1080:in_w/2 - 608/2:in_h /2 - 1080/2" -t {subclipLenght} -an ./VideoCreator/videos/bgVideos/video{i}.mp4')

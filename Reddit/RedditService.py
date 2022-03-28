@@ -15,7 +15,7 @@ def startSession():
     )
 
 
-def getHotSubmissions():
+def getHotSubmissions(limit):
     subreddit = reddit.subreddit("askReddit")
 
-    return subreddit.hot(limit=10)
+    return subreddit.hot(limit=limit)
